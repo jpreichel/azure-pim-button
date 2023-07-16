@@ -1,0 +1,29 @@
+{
+  "name": "PIM Extension",
+  "version": "0.0.0",
+  "manifest_version": 2,
+  "description": "Adds PIM buttons to Azure",
+  "author": "Jeff Reichel",
+  "homepage_url": "https://github.com/jpreichel/pim-extension",
+  "icons": {
+    "128": "images/icon.png"
+  },
+  "permissions": [
+    "tabs",
+    "webRequest",
+    "https://api.azrbac.mspim.azure.com/*",
+    "https://portal.azure.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://portal.azure.com/*"],
+      "run_at": "document_end",
+      "js": ["content.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
