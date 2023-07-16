@@ -70,16 +70,10 @@ window.addEventListener("load", async function() {
   pimElement.title = `Open ${resourceName} (${resourceType}) in PIM`;
   pimElement.addEventListener("click", () => openPimTab(resourceName));
 
-  const iconElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  iconElement.role = "presentation";
-  iconElement.focusable = "false";
+  const imageElement = document.createElement("img");
+  imageElement.src = browser.runtime.getURL("images/icon.png");
 
-  const useElement = document.createElementNS("http://www.w3.org/2000/svg", "use");
-  useElement.setAttribute("href", "#FxSymbol0-03b");
-  useElement.setAttributeNS("http://www.w3.org/1999/href", "xlink:href", "#FxSymbol0-03b");
-
-  iconElement.appendChild(useElement);
-  pimElement.appendChild(iconElement);
+  pimElement.appendChild(imageElement);
 
   actionsContainerElement.insertBefore(pimElement, actionsContainerElement.firstChild);
 });
