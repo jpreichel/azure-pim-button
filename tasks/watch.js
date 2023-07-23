@@ -1,9 +1,18 @@
-import gulp from 'gulp'
-import { paths } from '../gulpfile'
-import { scripts, styles, markup, images, manifest } from '.'
-import io from 'socket.io'
-import fancyLog from 'fancy-log'
-import chalk from 'chalk'
+import chalk from 'chalk';
+import fancyLog from 'fancy-log';
+import gulp from 'gulp';
+import { Server } from 'socket.io';
+
+import { paths } from '../gulpfile.js';
+import {
+  images,
+  manifest,
+  markup,
+  scripts,
+  styles,
+} from './index.js';
+
+const io = new Server();
 
 export function watch() {
   const server = io.listen(process.env.WEBSOCKET_PORT)

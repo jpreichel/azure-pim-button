@@ -1,8 +1,8 @@
-import gulp from 'gulp'
-import { paths } from '../gulpfile'
-import jeditor from 'gulp-json-editor'
-import gulpif from 'gulp-if'
+import gulp from 'gulp';
+import gulpif from 'gulp-if';
+import jeditor from 'gulp-json-editor';
 
+import { paths } from '../gulpfile.js';
 
 function addAutoreloadScript(manifestJson) {
   const hasScripts = manifestJson.background && manifestJson.background.scripts
@@ -16,8 +16,10 @@ function addAutoreloadScript(manifestJson) {
   }
 }
 
-export function manifest() {
-  return gulp.src(paths.manifest)
+export function manifest(done) {
+  gulp.src(paths.manifest)
     .pipe(gulpif(process.env.NODE_ENV === 'development', jeditor(addAutoreloadScript)))
     .pipe(gulp.dest('build'))
+
+  done()
 }

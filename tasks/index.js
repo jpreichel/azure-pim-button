@@ -1,8 +1,8 @@
-export { clean } from './clean'
-export { scripts } from './scripts'
-export { styles } from './styles'
-export { markup } from './markup'
-export { images } from './images'
-export { manifest } from './manifest'
-export { watch } from './watch'
-export { bundle } from './bundle'
+export { clean } from './clean.js';
+export { scripts } from './scripts.js';
+export { styles } from './styles.js';
+export { markup } from './markup.js';
+export { images } from './images.js';
+export { manifest } from './manifest.js';
+export { watch } from './watch.js';
+export { bundle } from './bundle.js';

@@ -1,14 +1,12 @@
-import gulp from 'gulp'
-import { paths } from '../gulpfile'
-import path from 'path'
-import webpackStream from 'webpack-stream'
-import webpack from 'webpack'
-import Dotenv from 'dotenv-webpack'
-import addSrc from 'gulp-add-src'
-import gulpif from 'gulp-if'
-import named from 'vinyl-named'
-import notify from 'gulp-notify'
+import Dotenv from 'dotenv-webpack';
+import gulp from 'gulp';
+import addSrc from 'gulp-add-src';
+import gulpif from 'gulp-if';
+import named from 'vinyl-named';
+import webpack from 'webpack';
+import webpackStream from 'webpack-stream';
 
+import { paths } from '../gulpfile.js';
 
 const webpackConfig = {
   mode: process.env.NODE_ENV,
@@ -50,10 +48,12 @@ const webpackConfig = {
   },
 }
 
-export function scripts() {
-  return gulp.src(paths.scripts, { allowEmpty: true })
+export function scripts(done) {
+  gulp.src(paths.scripts, { allowEmpty: true })
     .pipe(gulpif(process.env.NODE_ENV === 'development', addSrc('utils/autoreload.js')))
     .pipe(named())
     .pipe(webpackStream(webpackConfig, webpack))
     .pipe(gulp.dest('build'))
+
+  done()
 }

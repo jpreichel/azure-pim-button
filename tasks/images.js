@@ -1,8 +1,10 @@
-import gulp from 'gulp'
-import { paths } from '../gulpfile'
+import gulp from 'gulp';
 
+import { paths } from '../gulpfile.js';
 
-export function images() {
-  return gulp.src(paths.images, { since: gulp.lastRun(images) })
+export function images(done) {
+  gulp.src(paths.images, { since: gulp.lastRun(images) })
     .pipe(gulp.dest('build/images'))
+
+  done()
 }

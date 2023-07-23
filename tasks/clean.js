@@ -1,8 +1,5 @@
-import gulp from 'gulp'
-import { paths } from '../gulpfile'
-import del from 'del'
+import { deleteAsync } from 'del';
 
-
-export function clean() {
-  return del(['build'])
+export async function clean() {
+  return deleteAsync(['build'])
 }

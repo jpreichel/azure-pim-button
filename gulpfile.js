@@ -1,8 +1,18 @@
-import gulp from 'gulp'
-import { clean, scripts, styles, markup, images, manifest, watch, bundle } from './tasks'
-import dotenv from 'dotenv'
-dotenv.config()
+import dotenv from 'dotenv';
+import gulp from 'gulp';
 
+import {
+  bundle,
+  clean,
+  images,
+  manifest,
+  markup,
+  scripts,
+  styles,
+  watch,
+} from './tasks/index.js';
+
+dotenv.config()
 
 export const paths = {
   scripts: [

@@ -1,14 +1,17 @@
-import gulp from 'gulp'
-import { paths } from '../gulpfile'
-import sass from 'gulp-sass'
-import moduleImporter from 'sass-module-importer'
-import postcss from 'gulp-postcss'
-import postcssPresetEnv from 'postcss-preset-env'
-import notify from 'gulp-notify'
+import gulp from 'gulp';
+import notify from 'gulp-notify';
+import postcss from 'gulp-postcss';
+import gulpSass from 'gulp-sass';
+import postcssPresetEnv from 'postcss-preset-env';
+import dartSass from 'sass';
+import moduleImporter from 'sass-module-importer';
 
+import { paths } from '../gulpfile.js';
 
-export function styles() {
-  return gulp.src(paths.styles, { allowEmpty: true, sourcemaps: true })
+const sass = gulpSass(dartSass)
+
+export function styles(done) {
+  gulp.src(paths.styles, { allowEmpty: true, sourcemaps: true })
     .pipe(
       sass({
         // compile to expanded css because
@@ -33,4 +36,6 @@ export function styles() {
       title: 'Error compiling postcss!',
     }))
     .pipe(gulp.dest('build', { sourcemaps: '.' }))
+
+  done()
 }
