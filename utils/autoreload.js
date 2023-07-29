@@ -1,4 +1,4 @@
-import io from 'socket.io-client'
+import io from 'socket.io-client';
 
 // only developing the extension on chrome is supported,
 // if you want to develop an extension on firefox check out
@@ -7,7 +7,7 @@ function reloadExtension() {
   chrome.runtime.reload()
 }
 
-const socket = io(`http://localhost:${process.env.WEBSOCKET_PORT}`)
+const socket = io(`http://localhost:${process.env.WEBSOCKET_PORT}`, { transports: ['websocket', 'polling', 'flashsocket'] })
 socket.on('file changed', cb => {
   reloadExtension()
   cb()

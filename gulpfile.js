@@ -16,10 +16,10 @@ dotenv.config()
 
 export const paths = {
   scripts: [
-    'src/options.js',
-    'src/content.js',
-    'src/background.js',
-    'src/popup.js',
+    'src/options.ts',
+    'src/content.ts',
+    'src/background.ts',
+    'src/popup.ts',
   ],
 
   styles: [

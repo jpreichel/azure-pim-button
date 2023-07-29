@@ -15,7 +15,7 @@ import {
 const io = new Server();
 
 export function watch() {
-  const server = io.listen(process.env.WEBSOCKET_PORT)
+  const server = io.listen(process.env.WEBSOCKET_PORT, { transports: ['websocket', 'polling', 'flashsocket'] })
   let socket
   server.on('connection', (newSocket) => { socket = newSocket })
 
@@ -25,7 +25,7 @@ export function watch() {
     })
   }
 
-  gulp.watch('src/**/*.js', gulp.series(scripts, triggerFileChange))
+  gulp.watch('src/**/*.ts', gulp.series(scripts, triggerFileChange))
   gulp.watch('src/**/*.scss', gulp.series(styles, triggerFileChange))
   gulp.watch(paths.manifest, gulp.series(manifest, triggerFileChange))
   gulp.watch(paths.images, gulp.series(images, triggerFileChange))
