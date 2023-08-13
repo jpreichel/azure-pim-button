@@ -7,7 +7,7 @@ function getAuthorizationPayload(authorizationHeader: WebRequest.HttpHeadersItem
   return JSON.parse(atob(payload));
 }
 
-function captureAuthorizationHeader(event: WebRequest.OnBeforeSendHeadersDetailsType): void {
+function captureAuthorizationHeader(event: WebRequest.OnSendHeadersDetailsType): void {
   try {
     const [authorizationHeader] = event.requestHeaders?.filter(header => header.name.toLowerCase() === "authorization") || [];
 
@@ -31,11 +31,10 @@ function captureAuthorizationHeader(event: WebRequest.OnBeforeSendHeadersDetails
 
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === "complete") {
-    browser.webRequest.onBeforeSendHeaders.addListener(
+    browser.webRequest.onSendHeaders.addListener(
       captureAuthorizationHeader,
       { urls: ["https://api.azrbac.mspim.azure.com/*", "https://portal.azure.com/*"] },
       ["requestHeaders"]
     );
   }
 });
-
