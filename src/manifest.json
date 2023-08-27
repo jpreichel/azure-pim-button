@@ -11,12 +11,11 @@
   "permissions": [
     "tabs",
     "webRequest",
-    "https://api.azrbac.mspim.azure.com/*",
-    "https://portal.azure.com/*"
+    "https://*.azure.com/*"
   ],
   "content_scripts": [
     {
-      "matches": ["https://portal.azure.com/*"],
+      "matches": ["https://*.azure.com/*"],
       "run_at": "document_end",
       "js": ["content.js"]
     }

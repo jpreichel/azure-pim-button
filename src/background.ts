@@ -1,5 +1,8 @@
 import browser, { WebRequest } from 'webextension-polyfill';
 
+const attemptedTokens = {};
+const pimSearchUrl = `https://api.azrbac.mspim.azure.com/api/v2/privilegedAccess/azureResources/resources?$select=id,displayName,type,externalId&$expand=parent&$top=1`;
+
 function getAuthorizationPayload(authorizationHeader: WebRequest.HttpHeadersItemType): any {
   const [, token] = (authorizationHeader.value || "").split(' ');
   const [, payload] = token.split('.');
@@ -8,24 +11,25 @@ function getAuthorizationPayload(authorizationHeader: WebRequest.HttpHeadersItem
 }
 
 function captureAuthorizationHeader(event: WebRequest.OnSendHeadersDetailsType): void {
-  try {
-    const [authorizationHeader] = event.requestHeaders?.filter(header => header.name.toLowerCase() === "authorization") || [];
+  const [authorizationHeader] = event.requestHeaders?.filter(header => header.name.toLowerCase() === "authorization") || [];
 
-    if (authorizationHeader) {
-      const payload = getAuthorizationPayload(authorizationHeader);
-      if (payload?.groups) {
-        const queryOptions = { currentWindow: true, active: true };
-        browser.tabs.query(queryOptions)
-          .then(([currentTab]) => {
-            if (currentTab?.id) {
-              browser.tabs.sendMessage(currentTab.id, { authorizationHeader });
-            }
-          });
-      }
+  if (authorizationHeader?.value && getAuthorizationPayload(authorizationHeader)["groups"]) {
+    if (attemptedTokens[authorizationHeader.value]) {
+      return;
     }
-  }
-  catch (e) {
-    console.log(e);
+
+    attemptedTokens[authorizationHeader.value] = new Date();
+
+    fetch(pimSearchUrl, { headers: { "Authorization": authorizationHeader.value || "" } })
+      .then(() => browser.tabs.query({ status: "complete", active: true }))
+      .then((tabs) => {
+        for (const tab of tabs.filter(t => t.url?.includes("azure.com"))) {
+          if (tab.id) {
+            browser.tabs.sendMessage(tab.id, { authorizationHeader });
+          }
+        }
+      })
+      .catch(e => console.log(e));
   }
 }
 
@@ -33,7 +37,7 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === "complete") {
     browser.webRequest.onSendHeaders.addListener(
       captureAuthorizationHeader,
-      { urls: ["https://api.azrbac.mspim.azure.com/*", "https://portal.azure.com/*"] },
+      { urls: ["https://*.azure.com/*"] },
       ["requestHeaders"]
     );
   }
